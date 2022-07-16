@@ -1,0 +1,4 @@
+(executable
+ (public_name camley)
+ (name main)
+ (libraries camley))
