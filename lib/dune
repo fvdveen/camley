@@ -1,2 +1,8 @@
 (library
- (name camley))
+ (name camley)
+ (modules interface pretty_print ast lexer parser object interpreter))
+
+(ocamllex lexer)
+
+(menhir
+ (modules parser))
