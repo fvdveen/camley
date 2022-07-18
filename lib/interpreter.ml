@@ -40,6 +40,7 @@ and eval_expr env = function
     | UnOp(_, op, expr) -> bind (eval_expr env expr) (fun value -> eval_un_op op value)
     | BinOp(_, op, left, right) -> bind (eval_expr env left) (fun left ->
         bind (eval_expr env right) (fun right -> eval_bin_op op left right))
+    | BlockExpr(_, b) -> eval_block env b
     | _ -> Error("unimplmented")
 
 and eval_un_op op value = match (op, value) with
@@ -67,6 +68,9 @@ and eval_bin_op op left right = match (op, left, right) with
         | Some(value) -> Ok(value)
         | None -> Error(Printf.sprintf "operation %s not supported on types %s, %s" (string_of_bin_op op) (type_string_of_object left) (type_string_of_object right)))
     | _ -> Error(Printf.sprintf "operation %s not supported on types %s, %s" (string_of_bin_op op) (type_string_of_object left) (type_string_of_object right))
+
+and eval_block env = function
+    | Block(_, stmts) -> bind (eval_stmts (stmts, env)) (fun (_, value) -> Ok(value)) 
 
 and execute_int_bin_op op left right = match op with
     | BinOpPlus -> Ok(IntObj(left + right))
