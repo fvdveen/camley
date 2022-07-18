@@ -21,6 +21,10 @@ let type_string_of_object = function
     | BoolObj(_) -> Printf.sprintf "Bool" 
     | StringObj(_) -> Printf.sprintf "String" 
 
+let is_truthy = function
+    | VoidObj | BoolObj(false) -> false
+    | IntObj(_) | FloatObj(_) | BoolObj(true) | StringObj(_) -> true
+
 type bound_var = string * value
 
 type var_table = bound_var list

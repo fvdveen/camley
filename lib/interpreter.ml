@@ -41,6 +41,12 @@ and eval_expr env = function
     | BinOp(_, op, left, right) -> bind (eval_expr env left) (fun left ->
         bind (eval_expr env right) (fun right -> eval_bin_op op left right))
     | BlockExpr(_, b) -> eval_block env b
+    | If(_, cond, cons, alt) -> bind (eval_expr env cond) (fun res -> 
+        if is_truthy res 
+            then eval_block env cons
+            else match alt with
+            | None -> Ok(VoidObj)
+            | Some(b) -> eval_block env b)
     | _ -> Error("unimplmented")
 
 and eval_un_op op value = match (op, value) with
