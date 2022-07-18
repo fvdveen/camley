@@ -1,3 +1,5 @@
+open Ast
+
 type value = 
     | VoidObj
     | IntObj of int
@@ -18,3 +20,9 @@ let type_string_of_object = function
     | FloatObj(_) -> Printf.sprintf "Float" 
     | BoolObj(_) -> Printf.sprintf "Bool" 
     | StringObj(_) -> Printf.sprintf "String" 
+
+type bound_var = string * value
+
+type var_table = bound_var list
+
+type environment = stmt list * var_table

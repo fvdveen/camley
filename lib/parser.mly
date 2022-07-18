@@ -110,5 +110,5 @@ cond_alt:
 | RANGLEEQUAL{ BinOpGreaterThanEq }
 | AND {BinOpAnd}
 | OR {BinOpOr}
-| EQUAL EQUAL {BinOpEq}
+| EQUAL {BinOpEq}
 | NOTEQUAL {BinOpNotEq}

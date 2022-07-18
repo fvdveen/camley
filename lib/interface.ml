@@ -1,6 +1,5 @@
 open Lexer
 open Lexing
-open Ast
 open Interpreter
 
 let print_error_position lexbuf = 
@@ -19,5 +18,4 @@ let parse_program lexbuf =
 let parse_program_from_string source =
     parse_program (Lexing.from_string source)
 
-let run_program = function
-    | Program(stmts) -> eval_stmts [] stmts
+let run_program = eval_program
