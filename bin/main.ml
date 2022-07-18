@@ -2,7 +2,7 @@ open Camley.Interface
 open Camley.Object
 
 let () = 
-    match (parse_program_from_string  "let x = { let y = 6; y;}; x; y;") with
+    match (parse_program_from_string  "if (false) { 1; } else { 2; };") with
     | Error err -> Printf.printf "ERROR: %s\n" err
     | Ok prog -> match run_program prog with
         | Error err -> Printf.printf "ERROR: %s\n" err
