@@ -6,27 +6,43 @@ type value =
     | FloatObj of float
     | BoolObj of bool
     | StringObj of string
+    | ReturnObj of value
+    | FnObj of var_table * string list * block
 
-let string_of_object = function
+and bound_var = string * value
+
+and var_table = bound_var list
+
+and environment = stmt list * var_table
+
+let rec string_of_object = function
     | VoidObj -> "VoidObj"
     | IntObj(i) -> Printf.sprintf "Int: %d" i
     | FloatObj(f) -> Printf.sprintf "Float: %f" f
     | BoolObj(b) -> Printf.sprintf "Bool: %b" b
     | StringObj(s) -> Printf.sprintf "String: \"%s\"" s
+    | ReturnObj(v) -> "ReturnValue: " ^ string_of_object v
+    | FnObj(_, _, _) -> "Fn"
 
 let type_string_of_object = function
     | VoidObj -> "VoidObj"
-    | IntObj(_) -> Printf.sprintf "Int" 
-    | FloatObj(_) -> Printf.sprintf "Float" 
-    | BoolObj(_) -> Printf.sprintf "Bool" 
-    | StringObj(_) -> Printf.sprintf "String" 
+    | IntObj(_) -> "Int" 
+    | FloatObj(_) -> "Float" 
+    | BoolObj(_) -> "Bool" 
+    | StringObj(_) -> "String" 
+    | ReturnObj(_) -> "ReturnValue"
+    | FnObj(_) -> "Fn"
 
 let is_truthy = function
     | VoidObj | BoolObj(false) -> false
-    | IntObj(_) | FloatObj(_) | BoolObj(true) | StringObj(_) -> true
+    | _ -> true
 
-type bound_var = string * value
 
-type var_table = bound_var list
 
-type environment = stmt list * var_table
+let string_of_var_table = function
+    | [] -> "Args: ()"
+    | [(name, value)] -> Printf.sprintf "Args: (%s: %s)" name (string_of_object value)
+    | (name, value) :: tail -> let rec helper base = function
+        | [] -> base
+        | (n, v) :: t -> helper (base ^ ", " ^ n ^ ": " ^ (string_of_object v)) t
+    in ("Args: (" ^ name ^ ": " ^ string_of_object value ^ helper "" tail ^ ")")

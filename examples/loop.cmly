@@ -1,0 +1,12 @@
+let loop_range = fn(init, cond, iter, body) {
+    if (cond(init)) {
+        body(init);
+        loop_range(iter(init), cond, iter, body);
+    };
+};
+loop_range(
+    0, 
+    fn(x) { x < 10; },
+    fn(x) { x + 1; },
+    fn(x) { x + 2; }
+);
